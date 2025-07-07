@@ -1,0 +1,150 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #ece9e6, #ffffff);
+  background-attachment: fixed;
+  color: #3c2f2f;
+  text-align: center;
+}
+
+header {
+  background: linear-gradient(to right, #ffe1bd, #ffd5a6);
+  color: #4b2e1e;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+
+.language-switch {
+  margin-top: 1rem;
+}
+
+.language-switch button {
+  margin: 0 5px;
+  padding: 8px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background-color: #f1a75d;
+  color: #fffefc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.language-switch button:hover {
+  background-color: #e08d45;
+  transform: scale(1.08);
+}
+
+.search-box {
+  margin: 2rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box input[type="text"] {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ddd0c8;
+  border-radius: 12px;
+  width: 260px;
+  background-color: #fffefc;
+  transition: all 0.2s ease;
+}
+
+.search-box input[type="text"]:focus {
+  outline: none;
+  background-color: #fff3e6;
+  box-shadow: 0 0 0 3px #ffd7b5;
+}
+
+.search-box button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background-color: #ffbb7c;
+  color: #3c2f2f;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.search-box button:hover {
+  background-color: #f1a75d;
+  transform: scale(1.05);
+}
+
+#map {
+  height: 420px;
+  margin: 30px auto;
+  max-width: 680px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+#weatherInfo,
+#cultureInfo {
+  margin: 2rem auto;
+  padding: 2rem;
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #3e2a1d;
+}
+
+#weatherInfo h2,
+#cultureInfo h3 {
+  color: #cc7a00;
+}
+
+footer {
+  margin-top: 3rem;
+  padding: 1rem;
+  background: #f4e3d6;
+  color: #7c5c4b;
+  font-size: 0.9rem;
+  border-top: 1px solid #e5d1c0;
+}
+
+/* 小屏适配 */
+@media screen and (max-width: 600px) {
+  #map,
+  #weatherInfo,
+  #cultureInfo {
+    width: 92%;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-box input[type="text"],
+  .search-box button {
+    width: 90%;
+    max-width: 320px;
+  }
+
+  .language-switch button {
+    margin-bottom: 0.5rem;
+  }
+}
