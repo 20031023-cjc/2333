@@ -1,44 +1,81 @@
 /* 🌌 星空背景 */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
-  background-color: #0b0c2a;
-  overflow-x: hidden;
-  position: relative;
-}
-
 #star-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(#1c1f4a 1px, transparent 1px),
-              radial-gradient(#1c1f4a 1px, transparent 1px);
-  background-position: 0 0, 20px 20px;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(#1b1b3f 1px, transparent 1px),
+              radial-gradient(#1b1b3f 1px, transparent 1px);
   background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
   z-index: -1;
-  animation: starScroll 60s linear infinite;
+  animation: starScroll 80s linear infinite;
 }
 
 @keyframes starScroll {
   from { background-position: 0 0, 20px 20px; }
-  to   { background-position: -1000px -1000px, -980px -980px; }
+  to { background-position: -2000px -2000px, -1980px -1980px; }
 }
 
-/* 🌟 Title 动效（扫光 + 发光） */
-.glow-title {
-  position: relative;
-  font-size: 2.4rem;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0b0c2a;
   color: #ffffff;
-  letter-spacing: 2px;
-  text-shadow: 0 0 8px #8fd3ff, 0 0 15px #6bbfff;
+  text-align: center;
+}
+
+/* 🌙 夜间模式按钮 */
+#toggleMode {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 99;
+  background-color: #ffffff44;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 12px;
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: background-color 0.3s ease;
+}
+#toggleMode:hover {
+  background-color: #ffffff77;
+}
+
+/* 🌐 多语言 */
+.language-switch {
+  margin-top: 1rem;
+}
+.language-switch button {
+  margin: 0 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background-color: #3366cc;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.language-switch button:hover {
+  background-color: #4d88ff;
+  transform: scale(1.05);
+}
+
+/* 🌟 主标题扫光 */
+.glow-title {
+  font-size: 2.4rem;
+  color: #fff;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px #8fd3ff, 0 0 20px #6bbfff;
+  position: relative;
   overflow: hidden;
   display: inline-block;
 }
-
 .glow-title::after {
   content: '';
   position: absolute;
@@ -49,39 +86,12 @@ body {
   background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
   animation: shine 4s infinite;
 }
-
 @keyframes shine {
   0% { left: -75%; }
   100% { left: 125%; }
 }
 
-header {
-  background: transparent;
-  padding: 2rem 1rem 1rem;
-}
-
-/* 🌐 语言按钮 */
-.language-switch {
-  margin-top: 1rem;
-}
-.language-switch button {
-  margin: 0 5px;
-  padding: 8px 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  background-color: #3e8ed0;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.language-switch button:hover {
-  background-color: #5baeff;
-  transform: scale(1.08);
-}
-
-/* 🔍 搜索框 */
+/* 🔍 搜索区域 */
 .search-box {
   margin: 2rem auto;
   display: flex;
@@ -90,100 +100,129 @@ header {
   gap: 12px;
 }
 .search-box input[type="text"] {
-  padding: 10px 16px;
+  padding: 10px 14px;
   font-size: 1rem;
   border: none;
   border-radius: 12px;
-  width: 260px;
-  background-color: #ffffffcc;
+  width: 250px;
+  background-color: #ffffffdd;
   color: #000;
-  transition: 0.2s ease;
-}
-.search-box input[type="text"]:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px #76d4ff;
-  background-color: #fff;
 }
 .search-box button {
   padding: 10px 16px;
-  font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 12px;
-  background-color: #57bbf3;
-  color: #fff;
+  background-color: #4db8ff;
+  color: white;
   cursor: pointer;
-  transition: 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: 0.3s;
 }
 .search-box button:hover {
-  background-color: #2fa7ed;
+  background-color: #1da8ff;
   transform: scale(1.05);
 }
 
-/* 🗺️ 地图容器 */
+/* 🗺️ 地图 */
 #map {
   height: 420px;
   margin: 30px auto;
   max-width: 680px;
-  border-radius: 18px;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
   overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* 📦 卡片信息 */
+/* 🗺️ 地图样式切换按钮 */
+#mapStyleSwitch {
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+#mapStyleSwitch button {
+  margin: 0 4px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background-color: #444dff;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#mapStyleSwitch button:hover {
+  background-color: #6676ff;
+}
+
+/* 📦 信息卡片 */
 .info-card {
   margin: 2rem auto;
   padding: 2rem;
+  max-width: 680px;
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
-  border-radius: 20px;
-  max-width: 680px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 18px;
   color: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   text-align: left;
   line-height: 1.8;
   font-size: 1rem;
-  animation: slideUp 1s ease;
+  animation: slideUp 0.8s ease;
 }
-
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-#weatherInfo h2,
-#cultureInfo h3 {
-  color: #ffeeaa;
-  font-size: 1.3rem;
+/* ⭐ 收藏城市面板 */
+#favoritesPanel {
+  margin-top: 2rem;
+  padding: 1rem;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: #ccc;
+  backdrop-filter: blur(10px);
+}
+#favoritesPanel ul {
+  list-style: none;
+  padding: 0;
+}
+#favoritesPanel li {
+  padding: 6px 10px;
+  margin: 4px 0;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-/* 👣 Footer */
+/* 📜 搜索历史 */
+#searchHistory {
+  margin-top: 1rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* ⏬ Footer */
 footer {
   margin-top: 3rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: #ccc;
   font-size: 0.9rem;
-  text-shadow: 0 0 3px #000;
+  color: #ccc;
+  background: rgba(255, 255, 255, 0.04);
 }
 
-/* 📱 移动适配 */
+/* 📱 响应式 */
 @media screen and (max-width: 600px) {
   #map,
-  .info-card {
+  .info-card,
+  #favoritesPanel {
     width: 92%;
   }
 
   .search-box {
     flex-direction: column;
-    gap: 12px;
-  }
-
-  .search-box input[type="text"],
-  .search-box button {
-    width: 90%;
-    max-width: 320px;
+    gap: 10px;
   }
 
   .language-switch button {
