@@ -15,34 +15,33 @@ const i18n = {
   error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" },
 };
 
-// 🌍 地图初始化
-const map = L.map('map').setView([20, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: 'Map data © OpenStreetMap contributors',
-}).addTo(map);
+// 📦 LocalStorage Keys
+const HISTORY_KEY = "worldview_history";
+const FAVORITES_KEY = "worldview_favorites";
 
-// 地图点击获取城市
-map.on('click', async (e) => {
-  const lat = e.latlng.lat;
-  const lon = e.latlng.lng;
+// 🗺️ 地图样式切换支持
+let baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+const map = L.map('map', { layers: [baseTileLayer] }).setView([20, 0], 2);
 
-  try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
-    const data = await res.json();
-    const city = data.address.city || data.address.town || data.address.village || data.address.state;
-
-    if (city) {
-      document.getElementById("cityInput").value = city;
-      getWeather(city, lat, lon);
-    } else {
-      alert("No city found at this location.");
-    }
-  } catch (err) {
-    console.error("Reverse geocoding failed", err);
-  }
+// 🌐 主题切换
+document.getElementById("toggleMode").addEventListener("click", () => {
+  document.body.classList.toggle("dark");
 });
 
-// 🌤 动态天气图标映射（示例可拓展）
+// 地图样式切换按钮
+function setMapStyle(type) {
+  map.removeLayer(baseTileLayer);
+  if (type === "dark") {
+    baseTileLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_dark/{z}/{x}/{y}{r}.png');
+  } else if (type === "light") {
+    baseTileLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png');
+  } else {
+    baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+  }
+  map.addLayer(baseTileLayer);
+}
+
+// 动态天气 emoji 图标
 function getWeatherIcon(condition) {
   const lower = condition.toLowerCase();
   if (lower.includes("clear")) return "🌞";
@@ -54,7 +53,7 @@ function getWeatherIcon(condition) {
   return "🌡️";
 }
 
-// 主函数：获取天气和文化
+// 主函数：获取天气 + 文化 + 存储历史 & 收藏
 async function getWeather(city = null, lat = null, lon = null) {
   const cityInput = document.getElementById("cityInput");
   const weatherInfo = document.getElementById("weatherInfo");
@@ -91,9 +90,10 @@ async function getWeather(city = null, lat = null, lon = null) {
       <h2>${i18n.weatherTitle[currentLang]} ${city}</h2>
       <div style="font-size: 3rem;">${iconEmoji}</div>
       <p>🌡 ${temperature}°C, ${condition}</p>
+      <button onclick="addFavorite('${city}')">⭐ Add to Favorites</button>
     `;
 
-    // 🌎 国家文化信息
+    // 获取国家文化信息
     const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
     const countryData = await countryRes.json();
     const country = countryData[0];
@@ -120,6 +120,9 @@ async function getWeather(city = null, lat = null, lon = null) {
       <p><strong>${i18n.greeting[currentLang]}</strong> ${culture.greeting}</p>
       <p><strong>${i18n.etiquette[currentLang]}</strong> ${culture.etiquette}</p>
     `;
+
+    // 更新历史记录
+    updateHistory(city);
   } catch (err) {
     weatherInfo.innerHTML = i18n.error[currentLang];
     cultureInfo.innerHTML = "";
@@ -127,10 +130,10 @@ async function getWeather(city = null, lat = null, lon = null) {
   }
 }
 
-// 📍 当前定位天气
+// 📍 定位功能
 function getLocationWeather() {
   if (!navigator.geolocation) {
-    alert("Geolocation not supported.");
+    alert("Geolocation is not supported.");
     return;
   }
 
@@ -157,14 +160,14 @@ function getLocationWeather() {
   });
 }
 
-// 🌐 语言按钮高亮
+// 🧠 多语言按钮高亮
 function highlightActiveLanguage() {
   document.querySelectorAll(".language-switch button").forEach((btn) => {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
   });
 }
 
-// 语言切换功能
+// 🌐 切换语言
 document.querySelectorAll(".language-switch button").forEach((btn) => {
   btn.addEventListener("click", () => {
     const lang = btn.getAttribute("data-lang");
@@ -174,7 +177,7 @@ document.querySelectorAll(".language-switch button").forEach((btn) => {
   });
 });
 
-// 多语言更新
+// 🌍 多语言文本应用
 function applyTranslations() {
   document.title = i18n.title[currentLang];
   document.querySelector("h1").textContent = i18n.title[currentLang];
@@ -184,11 +187,49 @@ function applyTranslations() {
   buttons[1].textContent = i18n.useLocation[currentLang];
   highlightActiveLanguage();
 
-  // 自动刷新城市天气
   if (document.getElementById("weatherInfo").innerHTML) {
     const city = document.getElementById("cityInput").value;
     getWeather(city);
   }
 }
 
+// 💾 历史记录功能
+function updateHistory(city) {
+  let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+  history = history.filter(c => c !== city);
+  history.unshift(city);
+  if (history.length > 5) history.pop();
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const historyDiv = document.getElementById("searchHistory");
+  const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+  historyDiv.innerHTML = "Recent: " + history.map(city =>
+    `<button onclick="getWeather('${city}')">${city}</button>`
+  ).join(" ");
+}
+
+// ⭐ 收藏功能
+function addFavorite(city) {
+  let favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+  if (!favorites.includes(city)) {
+    favorites.push(city);
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    renderFavorites();
+  }
+}
+
+function renderFavorites() {
+  const list = document.getElementById("favoritesList");
+  const favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+  list.innerHTML = favorites.map(city =>
+    `<li onclick="getWeather('${city}')">${city}</li>`
+  ).join("");
+}
+
+// 初始化
 applyTranslations();
+renderHistory();
+renderFavorites();
