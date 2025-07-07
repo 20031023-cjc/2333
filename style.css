@@ -1,4 +1,4 @@
-/* 🌌 星空背景 */
+/* === 🌌 星空背景层 === */
 #star-background {
   position: fixed;
   top: 0; left: 0;
@@ -9,6 +9,11 @@
   background-position: 0 0, 20px 20px;
   z-index: -1;
   animation: starScroll 80s linear infinite;
+  display: none;
+}
+
+body.theme-night #star-background {
+  display: block;
 }
 
 @keyframes starScroll {
@@ -16,16 +21,23 @@
   to { background-position: -2000px -2000px, -1980px -1980px; }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0b0c2a;
-  color: #ffffff;
-  text-align: center;
+/* === ☀️ 时间段背景风格 === */
+body.theme-morning {
+  background: linear-gradient(to bottom, #f5f7fa, #c3dafe);
+  color: #333;
 }
 
-/* 🌙 夜间模式按钮 */
+body.theme-noon {
+  background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+  color: #222;
+}
+
+body.theme-night {
+  background-color: #0b0c2a;
+  color: #fff;
+}
+
+/* === 夜间模式按钮 === */
 #toggleMode {
   position: fixed;
   top: 15px;
@@ -37,7 +49,6 @@ body {
   padding: 8px 12px;
   font-size: 18px;
   color: #fff;
-  cursor: pointer;
   backdrop-filter: blur(5px);
   transition: background-color 0.3s ease;
 }
@@ -45,33 +56,11 @@ body {
   background-color: #ffffff77;
 }
 
-/* 🌐 多语言 */
-.language-switch {
-  margin-top: 1rem;
-}
-.language-switch button {
-  margin: 0 6px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 12px;
-  background-color: #3366cc;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: 0.3s;
-}
-.language-switch button:hover {
-  background-color: #4d88ff;
-  transform: scale(1.05);
-}
-
-/* 🌟 主标题扫光 */
+/* === 标题发光 === */
 .glow-title {
   font-size: 2.4rem;
-  color: #fff;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px #8fd3ff, 0 0 20px #6bbfff;
+  color: #ffffff;
+  text-shadow: 0 0 10px #a2e1ff, 0 0 25px #6bbfff;
   position: relative;
   overflow: hidden;
   display: inline-block;
@@ -83,15 +72,15 @@ body {
   left: -75%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
-  animation: shine 4s infinite;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shine 5s infinite;
 }
 @keyframes shine {
   0% { left: -75%; }
   100% { left: 125%; }
 }
 
-/* 🔍 搜索区域 */
+/* === 搜索栏 & 按钮 === */
 .search-box {
   margin: 2rem auto;
   display: flex;
@@ -104,7 +93,7 @@ body {
   font-size: 1rem;
   border: none;
   border-radius: 12px;
-  width: 250px;
+  width: 260px;
   background-color: #ffffffdd;
   color: #000;
 }
@@ -123,17 +112,17 @@ body {
   transform: scale(1.05);
 }
 
-/* 🗺️ 地图 */
+/* === 地图 === */
 #map {
   height: 420px;
   margin: 30px auto;
   max-width: 680px;
   border-radius: 16px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* 🗺️ 地图样式切换按钮 */
+/* === 地图样式切换按钮 === */
 #mapStyleSwitch {
   margin-top: -20px;
   margin-bottom: 20px;
@@ -152,16 +141,16 @@ body {
   background-color: #6676ff;
 }
 
-/* 📦 信息卡片 */
+/* === 信息卡片 === */
 .info-card {
   margin: 2rem auto;
   padding: 2rem;
   max-width: 680px;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   border-radius: 18px;
-  color: #fff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: inherit;
   text-align: left;
   line-height: 1.8;
   font-size: 1rem;
@@ -172,7 +161,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ⭐ 收藏城市面板 */
+/* === 收藏城市面板 === */
 #favoritesPanel {
   margin-top: 2rem;
   padding: 1rem;
@@ -181,7 +170,7 @@ body {
   margin-right: auto;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  color: #ccc;
+  color: inherit;
   backdrop-filter: blur(10px);
 }
 #favoritesPanel ul {
@@ -196,23 +185,50 @@ body {
   cursor: pointer;
 }
 
-/* 📜 搜索历史 */
+/* === 历史记录 === */
 #searchHistory {
   margin-top: 1rem;
-  color: #aaa;
   font-size: 0.9rem;
+  color: inherit;
+}
+#searchHistory button {
+  margin: 3px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: none;
+  background: #fff3;
+  color: inherit;
+  cursor: pointer;
 }
 
-/* ⏬ Footer */
+/* === 语言按钮 === */
+.language-switch button {
+  margin: 0 6px;
+  padding: 8px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background-color: #3366cc;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.language-switch button:hover {
+  background-color: #4d88ff;
+  transform: scale(1.05);
+}
+
+/* === Footer === */
 footer {
   margin-top: 3rem;
   padding: 1rem;
   font-size: 0.9rem;
   color: #ccc;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* 📱 响应式 */
+/* === 响应式 === */
 @media screen and (max-width: 600px) {
   #map,
   .info-card,
