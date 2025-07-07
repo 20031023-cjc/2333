@@ -14,18 +14,18 @@ const i18n = {
   error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" }
 };
 
-// 加载完毕隐藏 loading
+// ✅ 加载完成后隐藏 loading
 window.addEventListener("load", () => {
   document.getElementById("loadingOverlay")?.style.display = "none";
 });
 
-// 初始化地图
+// 🌍 初始化地图
 const map = L.map("map").setView([20, 0], 2);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "Map data © OpenStreetMap contributors",
 }).addTo(map);
 
-// 背景样式：根据天气图标设置
+// ☀️ 背景样式切换
 function setWeatherBackground(icon) {
   const body = document.body;
   body.className = "";
@@ -36,7 +36,7 @@ function setWeatherBackground(icon) {
   else body.classList.add("night");
 }
 
-// 主功能：获取天气和文化信息
+// 🌤 获取天气和文化信息
 async function getWeather(city = null, lat = null, lon = null) {
   const input = document.getElementById("cityInput");
   const weatherInfo = document.getElementById("weatherInfo");
@@ -47,10 +47,12 @@ async function getWeather(city = null, lat = null, lon = null) {
     cultureInfo.innerHTML = "";
     return;
   }
+
   const apiKey = "d0c82cf6ceae567537e0079215ab67dd";
   const url = lat && lon
     ? `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error("City not found");
@@ -62,19 +64,23 @@ async function getWeather(city = null, lat = null, lon = null) {
     const { country } = data.sys;
     const latUsed = data.coord.lat;
     const lonUsed = data.coord.lon;
+
     map.setView([latUsed, lonUsed], 8);
     L.marker([latUsed, lonUsed]).addTo(map);
     setWeatherBackground(icon);
+
     weatherInfo.innerHTML = `
       <h2>${i18n.weatherTitle[currentLang]} ${city}</h2>
       <img src="${iconUrl}" alt="${condition}" style="width: 80px;" />
       <p>🌡 ${temp}°C, ${condition}</p>`;
+
     const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${country}`);
     const countryData = await countryRes.json();
     const c = countryData[0];
     const flag = c.flags.svg;
     const language = Object.values(c.languages).join(", ");
     const countryName = c.name.common;
+
     const cultureTemplates = {
       JP: { food: "Sushi 🍣", greeting: "こんにちは", etiquette: "Bowing 🙇‍♂️" },
       CN: { food: "Dumplings 🥟", greeting: "你好", etiquette: "Respect with both hands 🤲" },
@@ -84,6 +90,7 @@ async function getWeather(city = null, lat = null, lon = null) {
       TH: { food: "Pad Thai 🍜", greeting: "สวัสดีครับ/ค่ะ", etiquette: "Wai greeting 🙏" },
     };
     const culture = cultureTemplates[country] || { food: "N/A", greeting: "N/A", etiquette: "N/A" };
+
     cultureInfo.innerHTML = `
       <h3>🌍 ${i18n.culturalInfo[currentLang]}: ${countryName}</h3>
       <img src="${flag}" alt="Flag" style="width: 100px;" />
@@ -98,7 +105,7 @@ async function getWeather(city = null, lat = null, lon = null) {
   }
 }
 
-// 点击地图获取天气
+// 地图点击获取天气
 map.on("click", async (e) => {
   const lat = e.latlng.lat;
   const lon = e.latlng.lng;
@@ -117,7 +124,7 @@ map.on("click", async (e) => {
   }
 });
 
-// 使用定位获取天气
+// 使用定位
 function getLocationWeather() {
   if (!navigator.geolocation) return alert("Geolocation not supported.");
   navigator.geolocation.getCurrentPosition(async (position) => {
@@ -141,12 +148,13 @@ function getLocationWeather() {
   });
 }
 
-// 语言切换按钮处理
+// 语言切换逻辑
 function highlightActiveLanguage() {
   document.querySelectorAll(".language-switch button").forEach((btn) => {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
   });
 }
+
 document.querySelectorAll(".language-switch button").forEach((btn) => {
   btn.addEventListener("click", () => {
     currentLang = btn.getAttribute("data-lang");
@@ -169,3 +177,48 @@ function applyTranslations() {
   }
 }
 applyTranslations();
+
+// ⭐ 收藏城市功能（可选扩展）
+function saveCurrentCity() {
+  const city = document.getElementById("cityInput").value;
+  if (!city) return alert("Please enter a city first.");
+  let saved = JSON.parse(localStorage.getItem("savedCities") || "[]");
+  if (!saved.includes(city)) {
+    saved.push(city);
+    localStorage.setItem("savedCities", JSON.stringify(saved));
+    alert("City saved!");
+  } else {
+    alert("City already saved.");
+  }
+}
+
+function showSavedCities() {
+  const popup = document.getElementById("savedCitiesPopup");
+  const list = document.getElementById("savedCitiesList");
+  const saved = JSON.parse(localStorage.getItem("savedCities") || "[]");
+  list.innerHTML = "";
+  if (saved.length === 0) {
+    list.innerHTML = "<li>No cities saved.</li>";
+  } else {
+    saved.forEach((city) => {
+      const li = document.createElement("li");
+      li.textContent = city;
+      li.onclick = () => {
+        document.getElementById("cityInput").value = city;
+        getWeather(city);
+        closeSavedCities();
+      };
+      list.appendChild(li);
+    });
+  }
+  popup.classList.remove("hidden");
+}
+
+function closeSavedCities() {
+  document.getElementById("savedCitiesPopup").classList.add("hidden");
+}
+
+// 🔄 卡片翻转控制函数
+function toggleFlip(cardElement) {
+  cardElement.classList.toggle("flipped");
+}
