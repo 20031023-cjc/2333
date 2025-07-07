@@ -2,29 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorldView</title>
 
-  <!-- Leaflet 地图 -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- 地图 & 动画库 -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Animate.css + Lottie 动画库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
 
-  <!-- 自定义样式 -->
+  <!-- 样式 & 脚本 -->
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4273/4273189.png" />
   <script defer src="app.js"></script>
 </head>
+
 <body>
-  <!-- ⏳ 加载动效 -->
-  <div id="loadingOverlay"><div class="loader"></div></div>
-
-  <!-- 粒子背景 -->
-  <div id="tsparticles"></div>
-
-  <!-- 页面内容 -->
   <header class="animate__animated animate__fadeInDown">
     <h1>🌏 WorldView</h1>
     <div class="language-switch">
@@ -38,13 +30,24 @@
     <div class="search-box animate__animated animate__fadeInUp">
       <input type="text" id="cityInput" placeholder="Enter city name" />
       <button onclick="getWeather()">🔍 Search</button>
-      <button onclick="getLocationWeather()" id="useLocationBtn">📍 Use My Location</button>
+      <button onclick="getLocationWeather()">📍 Use My Location</button>
+      <button onclick="saveCurrentCity()">⭐ Save this city</button>
+      <button onclick="showSavedCities()">📂 View Saved Cities</button>
     </div>
 
     <div id="map" class="animate__animated animate__fadeIn"></div>
     <div id="weatherInfo" class="animate__animated animate__fadeInUp"></div>
     <div id="cultureInfo" class="animate__animated animate__fadeInUp"></div>
   </main>
+
+  <!-- 📂 收藏城市弹出层 -->
+  <div id="savedCitiesPopup" class="popup hidden">
+    <div class="popup-content">
+      <h3>⭐ Saved Cities</h3>
+      <ul id="savedCitiesList"></ul>
+      <button onclick="closeSavedCities()" class="close-btn">✖ Close</button>
+    </div>
+  </div>
 
   <footer>
     <p>Made by Cai Jiacheng | Hosted on GitHub</p>
