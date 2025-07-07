@@ -15,33 +15,41 @@ const i18n = {
   error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" },
 };
 
-// 📦 LocalStorage Keys
+// 📦 本地存储 KEY
 const HISTORY_KEY = "worldview_history";
 const FAVORITES_KEY = "worldview_favorites";
 
-// 🗺️ 地图样式切换支持
-let baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+// 初始化地图（默认样式）
+let baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+});
 const map = L.map('map', { layers: [baseTileLayer] }).setView([20, 0], 2);
 
-// 🌐 主题切换
+// 🌙 夜间模式切换
 document.getElementById("toggleMode").addEventListener("click", () => {
   document.body.classList.toggle("dark");
 });
 
-// 地图样式切换按钮
+// 🗺️ 地图风格切换（改用 Carto 免费地图）
 function setMapStyle(type) {
   map.removeLayer(baseTileLayer);
   if (type === "dark") {
-    baseTileLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_dark/{z}/{x}/{y}{r}.png');
+    baseTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB',
+    });
   } else if (type === "light") {
-    baseTileLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png');
+    baseTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB',
+    });
   } else {
-    baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    baseTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    });
   }
   map.addLayer(baseTileLayer);
 }
 
-// 动态天气 emoji 图标
+// 🌤 动态天气图标（emoji）
 function getWeatherIcon(condition) {
   const lower = condition.toLowerCase();
   if (lower.includes("clear")) return "🌞";
@@ -53,7 +61,7 @@ function getWeatherIcon(condition) {
   return "🌡️";
 }
 
-// 主函数：获取天气 + 文化 + 存储历史 & 收藏
+// 🌤 获取天气和文化信息
 async function getWeather(city = null, lat = null, lon = null) {
   const cityInput = document.getElementById("cityInput");
   const weatherInfo = document.getElementById("weatherInfo");
@@ -93,7 +101,6 @@ async function getWeather(city = null, lat = null, lon = null) {
       <button onclick="addFavorite('${city}')">⭐ Add to Favorites</button>
     `;
 
-    // 获取国家文化信息
     const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
     const countryData = await countryRes.json();
     const country = countryData[0];
@@ -121,7 +128,6 @@ async function getWeather(city = null, lat = null, lon = null) {
       <p><strong>${i18n.etiquette[currentLang]}</strong> ${culture.etiquette}</p>
     `;
 
-    // 更新历史记录
     updateHistory(city);
   } catch (err) {
     weatherInfo.innerHTML = i18n.error[currentLang];
@@ -130,10 +136,10 @@ async function getWeather(city = null, lat = null, lon = null) {
   }
 }
 
-// 📍 定位功能
+// 📍 当前定位
 function getLocationWeather() {
   if (!navigator.geolocation) {
-    alert("Geolocation is not supported.");
+    alert("Geolocation not supported.");
     return;
   }
 
@@ -160,24 +166,7 @@ function getLocationWeather() {
   });
 }
 
-// 🧠 多语言按钮高亮
-function highlightActiveLanguage() {
-  document.querySelectorAll(".language-switch button").forEach((btn) => {
-    btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
-  });
-}
-
-// 🌐 切换语言
-document.querySelectorAll(".language-switch button").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const lang = btn.getAttribute("data-lang");
-    currentLang = lang;
-    localStorage.setItem("language", lang);
-    applyTranslations();
-  });
-});
-
-// 🌍 多语言文本应用
+// 💬 多语言应用
 function applyTranslations() {
   document.title = i18n.title[currentLang];
   document.querySelector("h1").textContent = i18n.title[currentLang];
@@ -193,7 +182,23 @@ function applyTranslations() {
   }
 }
 
-// 💾 历史记录功能
+// 🌐 多语言切换绑定
+document.querySelectorAll(".language-switch button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const lang = btn.getAttribute("data-lang");
+    currentLang = lang;
+    localStorage.setItem("language", lang);
+    applyTranslations();
+  });
+});
+
+function highlightActiveLanguage() {
+  document.querySelectorAll(".language-switch button").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
+  });
+}
+
+// 📜 搜索历史记录
 function updateHistory(city) {
   let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
   history = history.filter(c => c !== city);
@@ -229,7 +234,7 @@ function renderFavorites() {
   ).join("");
 }
 
-// 初始化
+// 🚀 初始化
 applyTranslations();
 renderHistory();
 renderFavorites();
