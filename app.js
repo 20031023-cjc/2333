@@ -1,4 +1,4 @@
-// 🌐 多语言
+// 🌐 多语言支持
 let currentLang = localStorage.getItem("language") || "en";
 const i18n = {
   title: { en: "WorldView", zh: "世界视图", ja: "ワールドビュー" },
@@ -11,32 +11,32 @@ const i18n = {
   food: { en: "Famous Food:", zh: "代表食物：", ja: "名物料理：" },
   greeting: { en: "Greeting:", zh: "问候语：", ja: "あいさつ：" },
   etiquette: { en: "Etiquette:", zh: "礼仪：", ja: "マナー：" },
-  error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" },
+  error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" }
 };
 
-// 加载动效结束
+// 加载完毕隐藏 loading
 window.addEventListener("load", () => {
-  document.getElementById("loadingOverlay").style.display = "none";
+  document.getElementById("loadingOverlay")?.style.display = "none";
 });
 
 // 初始化地图
-const map = L.map('map').setView([20, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: 'Map data © OpenStreetMap contributors',
+const map = L.map("map").setView([20, 0], 2);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "Map data © OpenStreetMap contributors",
 }).addTo(map);
 
-// 天气代码映射背景
+// 背景样式：根据天气图标设置
 function setWeatherBackground(icon) {
   const body = document.body;
-  body.className = ''; // 清除旧样式
-  if (icon.includes('01')) body.classList.add('sunny');
-  else if (icon.includes('02') || icon.includes('03') || icon.includes('04')) body.classList.add('cloudy');
-  else if (icon.includes('09') || icon.includes('10')) body.classList.add('rainy');
-  else if (icon.includes('13')) body.classList.add('snowy');
-  else body.classList.add('night');
+  body.className = "";
+  if (icon.includes("01")) body.classList.add("sunny");
+  else if (icon.includes("02") || icon.includes("03") || icon.includes("04")) body.classList.add("cloudy");
+  else if (icon.includes("09") || icon.includes("10")) body.classList.add("rainy");
+  else if (icon.includes("13")) body.classList.add("snowy");
+  else body.classList.add("night");
 }
 
-// 获取天气
+// 主功能：获取天气和文化信息
 async function getWeather(city = null, lat = null, lon = null) {
   const input = document.getElementById("cityInput");
   const weatherInfo = document.getElementById("weatherInfo");
@@ -47,17 +47,14 @@ async function getWeather(city = null, lat = null, lon = null) {
     cultureInfo.innerHTML = "";
     return;
   }
-
   const apiKey = "d0c82cf6ceae567537e0079215ab67dd";
   const url = lat && lon
     ? `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     : `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
-
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error("City not found");
     const data = await res.json();
-
     const { temp } = data.main;
     const condition = data.weather[0].description;
     const icon = data.weather[0].icon;
@@ -65,25 +62,19 @@ async function getWeather(city = null, lat = null, lon = null) {
     const { country } = data.sys;
     const latUsed = data.coord.lat;
     const lonUsed = data.coord.lon;
-
     map.setView([latUsed, lonUsed], 8);
     L.marker([latUsed, lonUsed]).addTo(map);
-
-    setWeatherBackground(icon); // 🌈 背景变化
-
+    setWeatherBackground(icon);
     weatherInfo.innerHTML = `
       <h2>${i18n.weatherTitle[currentLang]} ${city}</h2>
       <img src="${iconUrl}" alt="${condition}" style="width: 80px;" />
-      <p>🌡 ${temp}°C, ${condition}</p>
-    `;
-
+      <p>🌡 ${temp}°C, ${condition}</p>`;
     const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${country}`);
     const countryData = await countryRes.json();
     const c = countryData[0];
     const flag = c.flags.svg;
     const language = Object.values(c.languages).join(", ");
     const countryName = c.name.common;
-
     const cultureTemplates = {
       JP: { food: "Sushi 🍣", greeting: "こんにちは", etiquette: "Bowing 🙇‍♂️" },
       CN: { food: "Dumplings 🥟", greeting: "你好", etiquette: "Respect with both hands 🤲" },
@@ -92,17 +83,14 @@ async function getWeather(city = null, lat = null, lon = null) {
       KR: { food: "Kimchi 🥬", greeting: "안녕하세요", etiquette: "Two hands for everything 🙇" },
       TH: { food: "Pad Thai 🍜", greeting: "สวัสดีครับ/ค่ะ", etiquette: "Wai greeting 🙏" },
     };
-
     const culture = cultureTemplates[country] || { food: "N/A", greeting: "N/A", etiquette: "N/A" };
-
     cultureInfo.innerHTML = `
       <h3>🌍 ${i18n.culturalInfo[currentLang]}: ${countryName}</h3>
       <img src="${flag}" alt="Flag" style="width: 100px;" />
       <p><strong>${i18n.languageLabel[currentLang]}</strong> ${language}</p>
       <p><strong>${i18n.food[currentLang]}</strong> ${culture.food}</p>
       <p><strong>${i18n.greeting[currentLang]}</strong> ${culture.greeting}</p>
-      <p><strong>${i18n.etiquette[currentLang]}</strong> ${culture.etiquette}</p>
-    `;
+      <p><strong>${i18n.etiquette[currentLang]}</strong> ${culture.etiquette}</p>`;
   } catch (err) {
     weatherInfo.innerHTML = i18n.error[currentLang];
     cultureInfo.innerHTML = "";
@@ -111,7 +99,7 @@ async function getWeather(city = null, lat = null, lon = null) {
 }
 
 // 点击地图获取天气
-map.on('click', async (e) => {
+map.on("click", async (e) => {
   const lat = e.latlng.lat;
   const lon = e.latlng.lng;
   try {
@@ -129,7 +117,7 @@ map.on('click', async (e) => {
   }
 });
 
-// 使用定位
+// 使用定位获取天气
 function getLocationWeather() {
   if (!navigator.geolocation) return alert("Geolocation not supported.");
   navigator.geolocation.getCurrentPosition(async (position) => {
@@ -153,7 +141,7 @@ function getLocationWeather() {
   });
 }
 
-// 语言切换按钮
+// 语言切换按钮处理
 function highlightActiveLanguage() {
   document.querySelectorAll(".language-switch button").forEach((btn) => {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
@@ -166,6 +154,7 @@ document.querySelectorAll(".language-switch button").forEach((btn) => {
     applyTranslations();
   });
 });
+
 function applyTranslations() {
   document.title = i18n.title[currentLang];
   document.querySelector("h1").textContent = i18n.title[currentLang];
@@ -174,7 +163,6 @@ function applyTranslations() {
   buttons[0].textContent = `🔍 ${i18n.search[currentLang]}`;
   buttons[1].textContent = i18n.useLocation[currentLang];
   highlightActiveLanguage();
-
   if (document.getElementById("weatherInfo").innerHTML) {
     const city = document.getElementById("cityInput").value;
     getWeather(city);
