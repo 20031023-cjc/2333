@@ -1,247 +1,155 @@
-/* === 🌌 星空背景层 === */
-#star-background {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(#1b1b3f 1px, transparent 1px),
-              radial-gradient(#1b1b3f 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: 0 0, 20px 20px;
-  z-index: -1;
-  animation: starScroll 80s linear infinite;
-  display: none;
-}
-
-body.theme-night #star-background {
-  display: block;
-}
-
-@keyframes starScroll {
-  from { background-position: 0 0, 20px 20px; }
-  to { background-position: -2000px -2000px, -1980px -1980px; }
-}
-
-/* === ☀️ 时间段背景风格 === */
-body.theme-morning {
-  background: linear-gradient(to bottom, #f5f7fa, #c3dafe);
-  color: #333;
-}
-
-body.theme-noon {
-  background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
-  color: #222;
-}
-
-body.theme-night {
-  background-color: #0b0c2a;
+/* 🌌 全局视觉优化 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
   color: #fff;
-}
-
-/* === 夜间模式按钮 === */
-#toggleMode {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 99;
-  background-color: #ffffff44;
-  border: none;
-  border-radius: 30px;
-  padding: 8px 12px;
-  font-size: 18px;
-  color: #fff;
-  backdrop-filter: blur(5px);
-  transition: background-color 0.3s ease;
-}
-#toggleMode:hover {
-  background-color: #ffffff77;
-}
-
-/* === 标题发光 === */
-.glow-title {
-  font-size: 2.4rem;
-  color: #ffffff;
-  text-shadow: 0 0 10px #a2e1ff, 0 0 25px #6bbfff;
+  text-align: center;
+  background-color: #121212;
+  transition: background 0.5s ease;
   position: relative;
-  overflow: hidden;
-  display: inline-block;
-}
-.glow-title::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
-  animation: shine 5s infinite;
-}
-@keyframes shine {
-  0% { left: -75%; }
-  100% { left: 125%; }
+  z-index: 0;
 }
 
-/* === 搜索栏 & 按钮 === */
+#tsparticles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* ⏳ 加载动画 */
+#loadingOverlay {
+  position: fixed;
+  z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #ffb347;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* ⛅ 动态背景根据天气变换 */
+body.sunny { background: linear-gradient(#ffe082, #ffcc80); }
+body.cloudy { background: linear-gradient(#cfd8dc, #90a4ae); }
+body.rainy  { background: linear-gradient(#4f5b62, #263238); }
+body.snowy  { background: linear-gradient(#e0f7fa, #80deea); }
+body.night  { background: linear-gradient(#0f2027, #203a43, #2c5364); }
+
+header {
+  padding: 1.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #ffebc3;
+  letter-spacing: 1px;
+}
+.language-switch {
+  margin-top: 1rem;
+}
+.language-switch button {
+  margin: 0 5px;
+  padding: 8px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: #ffb347;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.language-switch button:hover {
+  background: #ff9800;
+  transform: scale(1.05);
+}
+
 .search-box {
   margin: 2rem auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 .search-box input[type="text"] {
-  padding: 10px 14px;
-  font-size: 1rem;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
-  border-radius: 12px;
-  width: 260px;
-  background-color: #ffffffdd;
-  color: #000;
+  width: 240px;
+  font-size: 1rem;
 }
 .search-box button {
-  padding: 10px 16px;
+  background-color: #ffb347;
+  color: #fff;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
-  background-color: #4db8ff;
-  color: white;
+  border-radius: 8px;
+  padding: 10px 16px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.2s ease;
 }
 .search-box button:hover {
-  background-color: #1da8ff;
   transform: scale(1.05);
 }
 
-/* === 地图 === */
 #map {
   height: 420px;
+  max-width: 680px;
   margin: 30px auto;
-  max-width: 680px;
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
 }
 
-/* === 地图样式切换按钮 === */
-#mapStyleSwitch {
-  margin-top: -20px;
-  margin-bottom: 20px;
-}
-#mapStyleSwitch button {
-  margin: 0 4px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background-color: #444dff;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#mapStyleSwitch button:hover {
-  background-color: #6676ff;
-}
-
-/* === 信息卡片 === */
-.info-card {
+#weatherInfo, #cultureInfo {
   margin: 2rem auto;
-  padding: 2rem;
+  padding: 1.5rem;
+  border-radius: 16px;
   max-width: 680px;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px);
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  color: inherit;
   text-align: left;
-  line-height: 1.8;
-  font-size: 1rem;
-  animation: slideUp 0.8s ease;
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* === 收藏城市面板 === */
-#favoritesPanel {
-  margin-top: 2rem;
-  padding: 1rem;
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  color: inherit;
+  line-height: 1.6;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffeebc;
   backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
-#favoritesPanel ul {
-  list-style: none;
-  padding: 0;
-}
-#favoritesPanel li {
-  padding: 6px 10px;
-  margin: 4px 0;
-  background-color: rgba(255,255,255,0.1);
-  border-radius: 8px;
-  cursor: pointer;
+#weatherInfo h2, #cultureInfo h3 {
+  color: #ffcc80;
 }
 
-/* === 历史记录 === */
-#searchHistory {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: inherit;
-}
-#searchHistory button {
-  margin: 3px;
-  padding: 5px 10px;
-  border-radius: 10px;
-  border: none;
-  background: #fff3;
-  color: inherit;
-  cursor: pointer;
-}
-
-/* === 语言按钮 === */
-.language-switch button {
-  margin: 0 6px;
-  padding: 8px 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  background-color: #3366cc;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: 0.3s;
-}
-.language-switch button:hover {
-  background-color: #4d88ff;
-  transform: scale(1.05);
-}
-
-/* === Footer === */
 footer {
   margin-top: 3rem;
   padding: 1rem;
-  font-size: 0.9rem;
-  color: #ccc;
-  background: rgba(255, 255, 255, 0.05);
+  color: #aaa;
+  background: transparent;
+  font-size: 0.85rem;
 }
 
-/* === 响应式 === */
+/* 响应式 */
 @media screen and (max-width: 600px) {
-  #map,
-  .info-card,
-  #favoritesPanel {
-    width: 92%;
-  }
-
   .search-box {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
-
-  .language-switch button {
-    margin-bottom: 0.5rem;
+  .search-box input, .search-box button {
+    width: 90%;
+  }
+  #map, #weatherInfo, #cultureInfo {
+    width: 90%;
   }
 }
