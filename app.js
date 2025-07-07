@@ -15,13 +15,13 @@ const i18n = {
   error: { en: "⚠️ Could not fetch weather data.", zh: "⚠️ 无法获取天气信息。", ja: "⚠️ 天気情報を取得できませんでした。" },
 };
 
-// 地图初始化
+// 🌍 地图初始化
 const map = L.map('map').setView([20, 0], 2);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: 'Map data © OpenStreetMap contributors',
 }).addTo(map);
 
-// 地图点击事件：获取点击位置城市名
+// 地图点击获取城市
 map.on('click', async (e) => {
   const lat = e.latlng.lat;
   const lon = e.latlng.lng;
@@ -42,7 +42,19 @@ map.on('click', async (e) => {
   }
 });
 
-// 获取天气和文化信息
+// 🌤 动态天气图标映射（示例可拓展）
+function getWeatherIcon(condition) {
+  const lower = condition.toLowerCase();
+  if (lower.includes("clear")) return "🌞";
+  if (lower.includes("cloud")) return "☁️";
+  if (lower.includes("rain")) return "🌧️";
+  if (lower.includes("storm")) return "⛈️";
+  if (lower.includes("snow")) return "❄️";
+  if (lower.includes("mist") || lower.includes("fog")) return "🌫️";
+  return "🌡️";
+}
+
+// 主函数：获取天气和文化
 async function getWeather(city = null, lat = null, lon = null) {
   const cityInput = document.getElementById("cityInput");
   const weatherInfo = document.getElementById("weatherInfo");
@@ -67,8 +79,7 @@ async function getWeather(city = null, lat = null, lon = null) {
 
     const temperature = data.main.temp;
     const condition = data.weather[0].description;
-    const icon = data.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+    const iconEmoji = getWeatherIcon(condition);
     const countryCode = data.sys.country;
     const latUsed = data.coord.lat;
     const lonUsed = data.coord.lon;
@@ -78,11 +89,11 @@ async function getWeather(city = null, lat = null, lon = null) {
 
     weatherInfo.innerHTML = `
       <h2>${i18n.weatherTitle[currentLang]} ${city}</h2>
-      <img src="${iconUrl}" alt="${condition}" />
+      <div style="font-size: 3rem;">${iconEmoji}</div>
       <p>🌡 ${temperature}°C, ${condition}</p>
     `;
 
-    // 获取国家文化信息
+    // 🌎 国家文化信息
     const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
     const countryData = await countryRes.json();
     const country = countryData[0];
@@ -116,10 +127,10 @@ async function getWeather(city = null, lat = null, lon = null) {
   }
 }
 
-// 获取当前位置天气
+// 📍 当前定位天气
 function getLocationWeather() {
   if (!navigator.geolocation) {
-    alert("Geolocation is not supported by your browser.");
+    alert("Geolocation not supported.");
     return;
   }
 
@@ -136,24 +147,24 @@ function getLocationWeather() {
         document.getElementById("cityInput").value = city;
         getWeather(city, lat, lon);
       } else {
-        alert("Could not determine city from location.");
+        alert("Could not determine city.");
       }
     } catch (err) {
       console.error("Location fetch failed", err);
     }
   }, () => {
-    alert("Unable to retrieve your location.");
+    alert("Location access denied.");
   });
 }
 
-// 语言按钮高亮
+// 🌐 语言按钮高亮
 function highlightActiveLanguage() {
   document.querySelectorAll(".language-switch button").forEach((btn) => {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
   });
 }
 
-// 语言切换
+// 语言切换功能
 document.querySelectorAll(".language-switch button").forEach((btn) => {
   btn.addEventListener("click", () => {
     const lang = btn.getAttribute("data-lang");
@@ -163,7 +174,7 @@ document.querySelectorAll(".language-switch button").forEach((btn) => {
   });
 });
 
-// 应用翻译
+// 多语言更新
 function applyTranslations() {
   document.title = i18n.title[currentLang];
   document.querySelector("h1").textContent = i18n.title[currentLang];
@@ -173,7 +184,7 @@ function applyTranslations() {
   buttons[1].textContent = i18n.useLocation[currentLang];
   highlightActiveLanguage();
 
-  // 自动刷新当前显示的城市
+  // 自动刷新城市天气
   if (document.getElementById("weatherInfo").innerHTML) {
     const city = document.getElementById("cityInput").value;
     getWeather(city);
