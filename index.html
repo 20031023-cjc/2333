@@ -9,16 +9,19 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- 动画库 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-  <!-- 样式 & JS -->
+  <!-- 自定义样式 -->
   <link rel="stylesheet" href="style.css" />
   <script defer src="app.js"></script>
 </head>
 <body>
+  <!-- 星空背景层 -->
+  <div id="star-background"></div>
+
   <header class="animate__animated animate__fadeInDown">
-    <h1>🌏 WorldView</h1>
+    <h1 class="glow-title">🌏 WorldView</h1>
     <div class="language-switch">
       <button data-lang="en">English</button>
       <button data-lang="zh">中文</button>
@@ -35,8 +38,8 @@
 
     <div id="map" class="animate__animated animate__fadeIn"></div>
 
-    <div id="weatherInfo" class="animate__animated animate__fadeInUp"></div>
-    <div id="cultureInfo" class="animate__animated animate__fadeInUp"></div>
+    <div id="weatherInfo" class="info-card animate__animated animate__fadeInUp"></div>
+    <div id="cultureInfo" class="info-card animate__animated animate__fadeInUp"></div>
   </main>
 
   <footer>
