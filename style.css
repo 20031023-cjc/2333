@@ -1,135 +1,177 @@
+/* 🌌 星空背景 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #ece9e6, #ffffff);
-  background-attachment: fixed;
-  color: #3c2f2f;
-  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  background-color: #0b0c2a;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#star-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(#1c1f4a 1px, transparent 1px),
+              radial-gradient(#1c1f4a 1px, transparent 1px);
+  background-position: 0 0, 20px 20px;
+  background-size: 40px 40px;
+  z-index: -1;
+  animation: starScroll 60s linear infinite;
+}
+
+@keyframes starScroll {
+  from { background-position: 0 0, 20px 20px; }
+  to   { background-position: -1000px -1000px, -980px -980px; }
+}
+
+/* 🌟 Title 动效（扫光 + 发光） */
+.glow-title {
+  position: relative;
+  font-size: 2.4rem;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px #8fd3ff, 0 0 15px #6bbfff;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.glow-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% { left: -75%; }
+  100% { left: 125%; }
 }
 
 header {
-  background: linear-gradient(to right, #ffe1bd, #ffd5a6);
-  color: #4b2e1e;
-  padding: 1.5rem 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: transparent;
+  padding: 2rem 1rem 1rem;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 2.2rem;
-  letter-spacing: 1px;
-}
-
+/* 🌐 语言按钮 */
 .language-switch {
   margin-top: 1rem;
 }
-
 .language-switch button {
   margin: 0 5px;
   padding: 8px 16px;
   font-weight: bold;
   border: none;
   border-radius: 12px;
-  background-color: #f1a75d;
-  color: #fffefc;
+  background-color: #3e8ed0;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-
 .language-switch button:hover {
-  background-color: #e08d45;
+  background-color: #5baeff;
   transform: scale(1.08);
 }
 
+/* 🔍 搜索框 */
 .search-box {
   margin: 2rem auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
-
 .search-box input[type="text"] {
-  padding: 10px 14px;
+  padding: 10px 16px;
   font-size: 1rem;
-  border: 1px solid #ddd0c8;
+  border: none;
   border-radius: 12px;
   width: 260px;
-  background-color: #fffefc;
-  transition: all 0.2s ease;
+  background-color: #ffffffcc;
+  color: #000;
+  transition: 0.2s ease;
 }
-
 .search-box input[type="text"]:focus {
   outline: none;
-  background-color: #fff3e6;
-  box-shadow: 0 0 0 3px #ffd7b5;
+  box-shadow: 0 0 0 3px #76d4ff;
+  background-color: #fff;
 }
-
 .search-box button {
   padding: 10px 16px;
   font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 12px;
-  background-color: #ffbb7c;
-  color: #3c2f2f;
+  background-color: #57bbf3;
+  color: #fff;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-
 .search-box button:hover {
-  background-color: #f1a75d;
+  background-color: #2fa7ed;
   transform: scale(1.05);
 }
 
+/* 🗺️ 地图容器 */
 #map {
   height: 420px;
   margin: 30px auto;
   max-width: 680px;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
-#weatherInfo,
-#cultureInfo {
+/* 📦 卡片信息 */
+.info-card {
   margin: 2rem auto;
   padding: 2rem;
-  max-width: 680px;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 680px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: #fff;
   text-align: left;
-  line-height: 1.7;
+  line-height: 1.8;
   font-size: 1rem;
-  color: #3e2a1d;
+  animation: slideUp 1s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 #weatherInfo h2,
 #cultureInfo h3 {
-  color: #cc7a00;
+  color: #ffeeaa;
+  font-size: 1.3rem;
 }
 
+/* 👣 Footer */
 footer {
   margin-top: 3rem;
   padding: 1rem;
-  background: #f4e3d6;
-  color: #7c5c4b;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ccc;
   font-size: 0.9rem;
-  border-top: 1px solid #e5d1c0;
+  text-shadow: 0 0 3px #000;
 }
 
-/* 小屏适配 */
+/* 📱 移动适配 */
 @media screen and (max-width: 600px) {
   #map,
-  #weatherInfo,
-  #cultureInfo {
+  .info-card {
     width: 92%;
   }
 
