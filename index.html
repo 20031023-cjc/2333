@@ -4,72 +4,79 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorldView</title>
-
-  <!-- 地图 & 动画库 -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <!-- 样式 & 脚本 -->
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4273/4273189.png" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="app.js"></script>
 </head>
-
 <body>
-  <!-- 页面加载动画 -->
-  <div id="loadingOverlay">
-    <div class="spinner"></div>
-  </div>
-
+  <div id="loadingOverlay"><div class="spinner"></div></div>
   <header class="animate__animated animate__fadeInDown">
-    <h1>🌏 WorldView</h1>
+    <h1 id="dynamicTitle">🌏 WorldView</h1>
     <div class="language-switch">
-      <button data-lang="en">English</button>
-      <button data-lang="zh">中文</button>
-      <button data-lang="ja">日本語</button>
+      <button data-lang="en" id="langEn">English</button>
+      <button data-lang="zh" id="langZh">中文</button>
+      <button data-lang="ja" id="langJa">日本語</button>
     </div>
   </header>
 
   <main>
     <div class="search-box animate__animated animate__fadeInUp">
+      <span id="typingText" class="typing"></span>
       <input type="text" id="cityInput" placeholder="Enter city name" />
-      <button onclick="getWeather()">🔍 Search</button>
-      <button onclick="getLocationWeather()">📍 Use My Location</button>
-      <button onclick="saveCurrentCity()">⭐ Save this city</button>
-      <button onclick="showSavedCities()">📂 View Saved Cities</button>
+      <button id="searchBtn">🔍 Search</button>
+      <button id="locationBtn">📍 Use My Location</button>
+      <button id="saveBtn">⭐ Save this city</button>
+      <button id="viewSavedBtn">📂 View Saved Cities</button>
+      <button id="compareBtn">🆚 Compare Cities</button>
+    </div>
+
+    <div class="map-style-switch">
+      <button id="mapStyleBtn">🗺️ Map Style</button>
+      <button id="nightModeBtn">🌙 Toggle Night Mode</button>
     </div>
 
     <div id="map" class="animate__animated animate__fadeIn"></div>
 
-    <!-- ⛅ 翻转天气卡片 -->
-    <div class="flip-card" onclick="toggleFlip(this)">
-      <div class="flip-inner">
-        <div class="flip-front" id="weatherInfo"></div>
-        <div class="flip-back">🌤️ Weather details are shown here. Click to flip back.</div>
+    <!-- 🃏 单张主卡片：展示当前城市天气 + 文化 -->
+    <div class="flip-card" id="mainCard">
+      <div class="flip-inner" id="mainFlip">
+        <div class="flip-front" id="mainCardFront"></div>
+        <div class="flip-back" id="mainCardBack"></div>
       </div>
     </div>
 
-    <!-- 🌍 翻转文化卡片 -->
-    <div class="flip-card" onclick="toggleFlip(this)">
-      <div class="flip-inner">
-        <div class="flip-front" id="cultureInfo"></div>
-        <div class="flip-back">🌐 Culture details are shown here. Click to flip back.</div>
+    <!-- 🆚 城市对比区域 -->
+    <div id="compareCards" class="compare-cards hidden">
+      <div class="flip-card">
+        <div class="flip-inner" id="compareFlip1">
+          <div class="flip-front" id="compareCard1Front"></div>
+          <div class="flip-back" id="compareCard1Back"></div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-inner" id="compareFlip2">
+          <div class="flip-front" id="compareCard2Front"></div>
+          <div class="flip-back" id="compareCard2Back"></div>
+        </div>
+      </div>
+      <div id="cancelCompareArea" class="cancel-compare">
+        <button id="cancelCompareBtn">❌ Cancel Comparison</button>
       </div>
     </div>
   </main>
 
-  <!-- 📂 收藏城市弹出层 -->
   <div id="savedCitiesPopup" class="popup hidden">
     <div class="popup-content">
-      <h3>⭐ Saved Cities</h3>
+      <h3 id="savedCitiesTitle">⭐ Saved Cities</h3>
       <ul id="savedCitiesList"></ul>
-      <button onclick="closeSavedCities()" class="close-btn">✖ Close</button>
+      <button id="closeSavedBtn" class="close-btn">✖ Close</button>
     </div>
   </div>
 
-  <footer>
-    <p>Made by Cai Jiacheng | Hosted on GitHub</p>
-  </footer>
+  <footer><p id="footerText">Made by Cai Jiacheng | Hosted on GitHub</p></footer>
 </body>
 </html>
