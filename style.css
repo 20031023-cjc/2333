@@ -1,82 +1,45 @@
-/* 🌌 全局视觉优化 */
+/* 🌐 全局基础 */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  color: #fff;
+  background: linear-gradient(to bottom, #fdf6ec, #faeee7);
+  color: #4b2e1e;
   text-align: center;
-  background-color: #121212;
-  transition: background 0.5s ease;
-  position: relative;
-  z-index: 0;
 }
-
-#tsparticles {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
-/* ⏳ 加载动画 */
-#loadingOverlay {
-  position: fixed;
-  z-index: 9999;
-  background: rgba(0,0,0,0.85);
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.loader {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #ffb347;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
-}
-
-/* ⛅ 动态背景根据天气变换 */
-body.sunny { background: linear-gradient(#ffe082, #ffcc80); }
-body.cloudy { background: linear-gradient(#cfd8dc, #90a4ae); }
-body.rainy  { background: linear-gradient(#4f5b62, #263238); }
-body.snowy  { background: linear-gradient(#e0f7fa, #80deea); }
-body.night  { background: linear-gradient(#0f2027, #203a43, #2c5364); }
 
 header {
+  background: linear-gradient(to right, #f3d5b5, #e7bb94);
+  color: #4b2e1e;
   padding: 1.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 header h1 {
   margin: 0;
   font-size: 2rem;
-  color: #ffebc3;
   letter-spacing: 1px;
 }
+
 .language-switch {
   margin-top: 1rem;
 }
+
 .language-switch button {
   margin: 0 5px;
   padding: 8px 16px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  background: #ffb347;
-  color: #fff;
+  background-color: #f1c27b;
+  color: #fffaf5;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
+
 .language-switch button:hover {
-  background: #ff9800;
+  background-color: #e0a96d;
   transform: scale(1.05);
 }
 
@@ -85,71 +48,176 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 10px;
 }
+
 .search-box input[type="text"] {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  width: 240px;
+  padding: 10px 14px;
   font-size: 1rem;
+  border: 1px solid #ddd0c8;
+  border-radius: 8px;
+  width: 250px;
+  max-width: 80%;
+  background-color: #fffaf5;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
+
+.search-box input[type="text"]:focus {
+  outline: none;
+  background-color: #fff3e6;
+  box-shadow: 0 0 0 3px #ffd7b5;
+}
+
 .search-box button {
-  background-color: #ffb347;
-  color: #fff;
+  padding: 10px 16px;
+  font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  padding: 10px 16px;
+  background-color: #f5c89c;
+  color: #4b2e1e;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
+
 .search-box button:hover {
+  background-color: #f1b97e;
   transform: scale(1.05);
 }
 
 #map {
   height: 420px;
-  max-width: 680px;
   margin: 30px auto;
+  max-width: 680px;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
 }
 
-#weatherInfo, #cultureInfo {
+#weatherInfo,
+#cultureInfo {
   margin: 2rem auto;
-  padding: 1.5rem;
+  padding: 1.8rem;
+  background: #fffefc;
   border-radius: 16px;
   max-width: 680px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   text-align: left;
-  line-height: 1.6;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffeebc;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #4b2e1e;
 }
-#weatherInfo h2, #cultureInfo h3 {
-  color: #ffcc80;
+
+#weatherInfo h2,
+#cultureInfo h3 {
+  color: #b45f06;
 }
 
 footer {
   margin-top: 3rem;
   padding: 1rem;
-  color: #aaa;
-  background: transparent;
-  font-size: 0.85rem;
+  background: #f9f1e7;
+  color: #7c5c4b;
+  font-size: 0.9rem;
 }
 
-/* 响应式 */
+/* 📂 收藏城市弹窗样式 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: #fffefc;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  max-width: 320px;
+  width: 90%;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: #4b2e1e;
+  animation: fadeInUp 0.4s ease;
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #b45f06;
+}
+
+#savedCitiesList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+#savedCitiesList li {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #fff2e6;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#savedCitiesList li:hover {
+  background-color: #ffe1c4;
+  font-weight: bold;
+}
+
+.close-btn {
+  padding: 6px 12px;
+  background-color: #eebda7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: #d7927f;
+}
+
+/* 📱 小屏适配 */
 @media screen and (max-width: 600px) {
+  #map,
+  #weatherInfo,
+  #cultureInfo {
+    width: 92%;
+  }
+
   .search-box {
     flex-direction: column;
     gap: 12px;
   }
-  .search-box input, .search-box button {
+
+  .search-box input[type="text"],
+  .search-box button {
     width: 90%;
+    max-width: 320px;
   }
-  #map, #weatherInfo, #cultureInfo {
-    width: 90%;
+
+  .language-switch button {
+    margin-bottom: 0.5rem;
   }
 }
