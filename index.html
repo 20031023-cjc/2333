@@ -17,6 +17,11 @@
 </head>
 
 <body>
+  <!-- 页面加载动画 -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
   <header class="animate__animated animate__fadeInDown">
     <h1>🌏 WorldView</h1>
     <div class="language-switch">
@@ -36,8 +41,22 @@
     </div>
 
     <div id="map" class="animate__animated animate__fadeIn"></div>
-    <div id="weatherInfo" class="animate__animated animate__fadeInUp"></div>
-    <div id="cultureInfo" class="animate__animated animate__fadeInUp"></div>
+
+    <!-- ⛅ 翻转天气卡片 -->
+    <div class="flip-card" onclick="toggleFlip(this)">
+      <div class="flip-inner">
+        <div class="flip-front" id="weatherInfo"></div>
+        <div class="flip-back">🌤️ Weather details are shown here. Click to flip back.</div>
+      </div>
+    </div>
+
+    <!-- 🌍 翻转文化卡片 -->
+    <div class="flip-card" onclick="toggleFlip(this)">
+      <div class="flip-inner">
+        <div class="flip-front" id="cultureInfo"></div>
+        <div class="flip-back">🌐 Culture details are shown here. Click to flip back.</div>
+      </div>
+    </div>
   </main>
 
   <!-- 📂 收藏城市弹出层 -->
