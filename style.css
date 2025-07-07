@@ -6,6 +6,33 @@ body {
   background: linear-gradient(to bottom, #fdf6ec, #faeee7);
   color: #4b2e1e;
   text-align: center;
+  transition: background 0.5s ease, color 0.3s ease;
+}
+
+/* ⏳ 页面加载动画 */
+#loadingOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #ff9966;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 header {
@@ -43,6 +70,13 @@ header h1 {
   transform: scale(1.05);
 }
 
+.language-switch button.active {
+  border: 2px solid #fff;
+  background-color: #e6a35e;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* 🔍 搜索框 */
 .search-box {
   margin: 2rem auto;
   display: flex;
@@ -87,6 +121,7 @@ header h1 {
   transform: scale(1.05);
 }
 
+/* 🗺️ 地图区域 */
 #map {
   height: 420px;
   margin: 30px auto;
@@ -96,18 +131,49 @@ header h1 {
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
 }
 
-#weatherInfo,
-#cultureInfo {
+/* 🔄 卡片翻转容器 */
+.flip-card {
+  background-color: transparent;
+  width: 680px;
+  max-width: 92%;
   margin: 2rem auto;
-  padding: 1.8rem;
-  background: #fffefc;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: relative;
+  backface-visibility: hidden;
   border-radius: 16px;
-  max-width: 680px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  text-align: left;
-  line-height: 1.7;
-  font-size: 1rem;
+  padding: 1.8rem;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #4b2e1e;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 #weatherInfo h2,
@@ -126,10 +192,8 @@ footer {
 /* 📂 收藏城市弹窗样式 */
 .popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(15, 15, 15, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
@@ -198,11 +262,32 @@ footer {
   background-color: #d7927f;
 }
 
+/* 🌙 动态天气背景风格 */
+body.sunny {
+  background: linear-gradient(to top, #ffe47a, #ffcc33);
+}
+
+body.cloudy {
+  background: linear-gradient(to top, #d3d3d3, #a0a0a0);
+}
+
+body.rainy {
+  background: linear-gradient(to top, #8ea6b4, #5f7684);
+}
+
+body.snowy {
+  background: linear-gradient(to top, #f0f8ff, #e0e8f0);
+}
+
+body.night {
+  background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+  color: #e0e0e0;
+}
+
 /* 📱 小屏适配 */
 @media screen and (max-width: 600px) {
   #map,
-  #weatherInfo,
-  #cultureInfo {
+  .flip-card {
     width: 92%;
   }
 
