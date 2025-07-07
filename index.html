@@ -11,8 +11,8 @@
 
   <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-  <!-- 图标库 -->
+  
+  <!-- Font Awesome 图标库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <!-- 自定义样式 -->
@@ -20,10 +20,10 @@
   <script defer src="app.js"></script>
 </head>
 <body>
-  <!-- 🌌 星空背景 -->
+  <!-- 🌌 星空背景层（夜间启用） -->
   <div id="star-background"></div>
 
-  <!-- 🌙 夜间模式按钮 -->
+  <!-- 夜间模式切换 -->
   <button id="toggleMode" title="Toggle Night Mode"><i class="fas fa-moon"></i></button>
 
   <header class="animate__animated animate__fadeInDown">
@@ -36,26 +36,25 @@
   </header>
 
   <main>
-    <!-- 🔍 搜索栏 -->
     <div class="search-box animate__animated animate__fadeInUp">
       <input type="text" id="cityInput" placeholder="Enter city name" />
       <button onclick="getWeather()">🔍 Search</button>
       <button onclick="getLocationWeather()" id="useLocationBtn">📍 Use My Location</button>
     </div>
 
-    <!-- 📜 历史记录区域 -->
+    <!-- 📜 搜索历史记录 -->
     <div id="searchHistory" class="animate__animated animate__fadeInUp"></div>
 
-    <!-- 🗺️ 地图 -->
+    <!-- 🗺️ 地图区域 -->
     <div id="map" class="animate__animated animate__fadeIn"></div>
 
-    <!-- 🗺️ 地图风格切换 -->
+    <!-- 🗺️ 地图风格按钮 -->
     <div id="mapStyleSwitch">
       <button onclick="setMapStyle('light')">🗺️ Light</button>
       <button onclick="setMapStyle('dark')">🌑 Dark</button>
     </div>
 
-    <!-- 💾 收藏城市 -->
+    <!-- ⭐ 收藏城市列表 -->
     <div id="favoritesPanel">
       <h3>⭐ Saved Cities</h3>
       <ul id="favoritesList"></ul>
@@ -64,7 +63,7 @@
     <!-- 🌤 天气卡片 -->
     <div id="weatherInfo" class="info-card animate__animated animate__fadeInUp"></div>
 
-    <!-- 🎎 文化卡片 -->
+    <!-- 🎎 文化信息卡片 -->
     <div id="cultureInfo" class="info-card animate__animated animate__fadeInUp"></div>
   </main>
 
