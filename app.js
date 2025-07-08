@@ -23,8 +23,7 @@ const i18n = {
   food: { en: "Famous Food:", zh: "代表食物：", ja: "名物料理：" },
   greeting: { en: "Greeting:", zh: "问候语：", ja: "挨拶：" },
   etiquette: { en: "Etiquette:", zh: "礼仪：", ja: "マナー：" },
-  noData: { en: "No data available.", zh: "暂无数据。", ja: "データなし。" },
-  // ...可拓展更多文本
+  noData: { en: "No data available.", zh: "暂无数据。", ja: "データなし。" }
 };
 
 // 🌟 页面初始化
@@ -36,7 +35,6 @@ window.addEventListener("DOMContentLoaded", () => {
   hideCompareCards();
   hideLoading();
   initMap();
-  // 默认加载一个城市，比如 Tokyo
   getWeather("Tokyo");
 });
 
@@ -69,7 +67,6 @@ function updateAllTexts() {
   document.getElementById("cancelCompareBtn").innerText = i18n.cancelCompare[currentLang];
   document.getElementById("footerText").innerText = i18n.footer[currentLang];
 }
-
 function updatePopupTexts() {
   document.getElementById("savedCitiesTitle").innerText = i18n.savedCitiesTitle[currentLang];
   document.getElementById("closeSavedBtn").innerText = i18n.close[currentLang];
@@ -84,14 +81,17 @@ function bindBtnEvents() {
   document.getElementById("closeSavedBtn").onclick = () => closeSavedCities();
   document.getElementById("compareBtn").onclick = () => compareCities();
   document.getElementById("cancelCompareBtn").onclick = () => cancelCompare();
-  document.getElementById("mainCard").onclick = () => toggleFlip("mainFlip");
-  document.getElementById("compareFlip1").onclick = () => toggleFlip("compareFlip1");
-  document.getElementById("compareFlip2").onclick = () => toggleFlip("compareFlip2");
-}
 
-function toggleFlip(id) {
-  const flip = document.getElementById(id);
-  if (flip) flip.classList.toggle("flipped");
+  // === 这里是100%能用的卡片翻转事件 ===
+  document.getElementById("mainCard").onclick = function() {
+    document.getElementById("mainFlip").classList.toggle("flipped");
+  };
+  document.getElementById("compareFlip1").onclick = function() {
+    this.classList.toggle("flipped");
+  };
+  document.getElementById("compareFlip2").onclick = function() {
+    this.classList.toggle("flipped");
+  };
 }
 
 // ========== 主卡片 & 比较卡片显示隐藏 ===========
@@ -106,7 +106,6 @@ function showCompareCards() {
 }
 function hideCompareCards() {
   document.getElementById("compareCards").classList.add("hidden");
-  // 保证翻转状态重置
   document.getElementById("compareFlip1").classList.remove("flipped");
   document.getElementById("compareFlip2").classList.remove("flipped");
 }
@@ -229,7 +228,6 @@ function renderMainCard({city, weather, country, error}) {
     back.innerHTML = `<b>${i18n.noData[currentLang]}</b>`;
     return;
   }
-  // Emoji简易判定
   let weatherEmoji = weather && weather.weather && weather.weather[0] ? getWeatherEmoji(weather.weather[0].main) : "❓";
   front.innerHTML = `
     <div style="font-size:2.3rem">${weatherEmoji}</div>
@@ -329,8 +327,7 @@ const countryTranslations = {
     en: { greeting: "Hello (你好 Nǐ hǎo)", etiquette: "Respect elders" },
     zh: { greeting: "你好", etiquette: "尊重长辈" },
     ja: { greeting: "ニーハオ", etiquette: "年長者を敬う" }
-  },
-  // 可继续丰富其他国家
+  }
 };
 
 // 菜单食物小功能（可拓展）
