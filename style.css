@@ -1,4 +1,3 @@
-/* 🌐 全局基础样式 */
 body {
   margin: 0;
   padding: 0;
@@ -53,35 +52,31 @@ button:hover {
   background-color: #ffc266;
 }
 
-/* 星空背景 */
 body.starry {
   background: url('https://cdn.pixabay.com/photo/2017/08/30/07/52/stars-2695569_1280.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
 }
 
-/* 夜间模式 */
 body.night-mode {
   background: #0b0c2a;
   color: #f0f0f0;
 }
 
-/* 卡片+毛玻璃 */
 .flip-card {
-  background-color: transparent;
+  perspective: 1000px;
   width: 300px;
   height: 200px;
-  margin: 1.5rem auto;
-  perspective: 1000px;
+  margin: 2.5rem auto;
+  background: transparent;
 }
 
 .flip-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
   transform-style: preserve-3d;
-  transition: transform 0.6s;
+  transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1);
 }
 
 .flip-inner.flipped {
@@ -92,7 +87,6 @@ body.night-mode {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -117,15 +111,15 @@ body.night-mode {
   transform: rotateY(180deg);
 }
 
-/* 地图区域 */
 #map {
   height: 400px;
-  margin: 1rem auto;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin: 2rem auto;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  backdrop-filter: blur(6px);
 }
 
-/* 弹出窗口 */
 .popup {
   position: fixed;
   top: 10%;
@@ -142,40 +136,13 @@ body.night-mode {
   display: none;
 }
 
-/* 动态打字效果 */
 .typing::after {
   content: '|';
   animation: blink 1s step-start infinite;
   color: #888;
 }
-
 @keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* 图表画布 */
-#chartCanvas {
-  width: 90%;
-  max-width: 600px;
-  height: 300px;
-  margin: 2rem auto;
-  display: none;
-}
-
-/* 地图容器美化 */
-#map {
-  height: 400px;
-  margin: 2rem auto;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  backdrop-filter: blur(6px);
-}
-
-.flip-card {
-  margin: 2.5rem auto;
+  50% { opacity: 0; }
 }
 
 .compare-cards {
@@ -226,7 +193,6 @@ footer {
   letter-spacing: 0.5px;
 }
 
-/* 加载动画 */
 #loadingOverlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -249,30 +215,4 @@ footer {
 }
 @keyframes spin {
   100% { transform: rotate(360deg);}
-}
-.flip-card {
-  perspective: 1000px;
-}
-
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1);
-}
-
-.flip-inner.flipped {
-  transform: rotateY(180deg);
-}
-
-.flip-front, .flip-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-}
-
-.flip-back {
-  transform: rotateY(180deg);
 }
