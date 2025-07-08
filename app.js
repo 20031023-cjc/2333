@@ -26,6 +26,8 @@ const i18n = {
   noData: { en: "No data available.", zh: "暂无数据。", ja: "データなし。" }
 };
 
+const WEATHER_KEY = "d0c82cf6ceae567537e0079215ab67dd";
+
 // 🌟 页面初始化
 window.addEventListener("DOMContentLoaded", () => {
   bindLangSwitch();
@@ -82,7 +84,6 @@ function bindBtnEvents() {
   document.getElementById("compareBtn").onclick = () => compareCities();
   document.getElementById("cancelCompareBtn").onclick = () => cancelCompare();
 
-  // === 这里是100%能用的卡片翻转事件 ===
   document.getElementById("mainCard").onclick = function() {
     document.getElementById("mainFlip").classList.toggle("flipped");
   };
@@ -158,7 +159,7 @@ let currentCityInfo = null;
 function getWeather(cityName) {
   showLoading();
   if (!cityName) cityName = document.getElementById("cityInput").value || "Tokyo";
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=YOUR_OPENWEATHERMAP_KEY&units=metric&lang=${currentLang}`)
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${WEATHER_KEY}&units=metric&lang=${currentLang}`)
     .then(res => res.json())
     .then(data => {
       if (data && data.cod === 200) {
@@ -177,7 +178,7 @@ function getWeather(cityName) {
 
 function getWeatherByCoords(lat, lng) {
   showLoading();
-  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=YOUR_OPENWEATHERMAP_KEY&units=metric&lang=${currentLang}`)
+  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${WEATHER_KEY}&units=metric&lang=${currentLang}`)
     .then(res => res.json())
     .then(data => {
       if (data && data.cod === 200) {
@@ -253,7 +254,7 @@ function compareCities() {
   showLoading();
   const city2 = prompt("Enter the city to compare:");
   if (!city2) { hideLoading(); return; }
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city2}&appid=YOUR_OPENWEATHERMAP_KEY&units=metric&lang=${currentLang}`)
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city2}&appid=${WEATHER_KEY}&units=metric&lang=${currentLang}`)
     .then(res => res.json())
     .then(data => {
       if (data && data.cod === 200) {
@@ -330,7 +331,6 @@ const countryTranslations = {
   }
 };
 
-// 菜单食物小功能（可拓展）
 function guessFood(name) {
   if (name === "Japan") return currentLang === "ja" ? "寿司・ラーメン" : currentLang === "zh" ? "寿司，拉面" : "Sushi, Ramen";
   if (name === "China") return currentLang === "ja" ? "餃子・火鍋" : currentLang === "zh" ? "饺子，火锅" : "Dumplings, Hotpot";
@@ -339,7 +339,6 @@ function guessFood(name) {
   return "-";
 }
 
-// 天气Emoji辅助
 function getWeatherEmoji(main) {
   if (!main) return "❓";
   if (/cloud/i.test(main)) return "⛅️";
